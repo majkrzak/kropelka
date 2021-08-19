@@ -1,0 +1,44 @@
+from math import log
+
+name = "kropelka"
+mcu = "attiny13a"
+fcpu = 9600000
+freq = 433_920_000
+baud = 9600
+error = 32.5 / 1_000_000
+fosc = 26_000_000 * (1 - error)
+
+
+FREQ = round(freq / (fosc / 2 ** 16)).to_bytes(length=3, byteorder="big", signed=False)
+DRATE_E = int(log(baud * 2 ** 20 / fosc) / log(2))
+DRATE_M = int((baud * 2 ** 28) / (fosc * 2 ** DRATE_E) - 256)
+
+
+env = Environment(
+    CC="avr-gcc",
+    OBJCOPY="avr-objcopy",
+    CCFLAGS=[
+        "-Os",
+        "-Wall",
+        "-Wextra",
+        "-std=c11",
+        "-mmcu=attiny13a",
+    ],
+    CPPDEFINES={
+        "F_CPU": 9600000,
+        "RADIO_FREQ": ",".join(map(str, FREQ)),
+        "RADIO_DRATE_E": DRATE_E,
+        "RADIO_DRATE_M": DRATE_M,
+    },
+    BUILDERS={
+        "Hex": Builder(
+            action="$OBJCOPY -j .text -j .data -O ihex $SOURCE $TARGET",
+            suffix=".hex",
+            single_source=True,
+        )
+    },
+    PROGSUFFIX=".elf",
+)
+
+
+env.Hex(env.Program(name, [env.Object(s) for s in env.Glob("*.c")]))
