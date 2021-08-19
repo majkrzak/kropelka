@@ -1,8 +1,6 @@
 from math import log
 
 name = "kropelka"
-mcu = "attiny13a"
-fcpu = 9600000
 freq = 433_920_000
 baud = 9600
 error = 32.5 / 1_000_000
