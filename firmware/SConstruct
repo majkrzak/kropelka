@@ -1,15 +1,17 @@
 from math import log
 
+from cc1101 import CC1101
+
 name = "kropelka"
-freq = 433_920_000
-baud = 9600
-error = 32.5 / 1_000_000
-fosc = 26_000_000 * (1 - error)
 
+cc1101 = CC1101(
+        oscilator_frequency = 26_000_000,
+        oscilator_error = 32.5 / 1_000_000,
+        carier_frequency = 433_920_000,
+        data_rate = 9600
+    )
 
-FREQ = round(freq / (fosc / 2 ** 16)).to_bytes(length=3, byteorder="big", signed=False)
-DRATE_E = int(log(baud * 2 ** 20 / fosc) / log(2))
-DRATE_M = int((baud * 2 ** 28) / (fosc * 2 ** DRATE_E) - 256)
+print(cc1101)
 
 
 env = Environment(
@@ -24,9 +26,11 @@ env = Environment(
     ],
     CPPDEFINES={
         "F_CPU": 9600000,
-        "RADIO_FREQ": ",".join(map(str, FREQ)),
-        "RADIO_DRATE_E": DRATE_E,
-        "RADIO_DRATE_M": DRATE_M,
+        "RADIO_FREQ": ",".join(map(str, cc1101.FREQ)),
+        "RADIO_DRATE_E": cc1101.DRATE_E,
+        "RADIO_DRATE_M": cc1101.DRATE_M,
+        "RADIO_CHANSPC_E": cc1101.CHANSPC_E,
+        "RADIO_CHANSPC_M": cc1101.CHANSPC_M,
     },
     BUILDERS={
         "Hex": Builder(
