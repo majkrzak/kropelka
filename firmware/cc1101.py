@@ -22,11 +22,13 @@ class CC1101(object):
         carier_frequency,
         data_rate,
         channel_spacing=200_000,
+        channel_bandwidth=200_000,
     ):
         self._fosc = oscilator_frequency * (1 - oscilator_error)
         self._freq = carier_frequency
         self._baud = data_rate
         self._cspc = channel_spacing
+        self._cbdw = channel_bandwidth
 
     @property
     def FREQ(self):
@@ -55,6 +57,26 @@ class CC1101(object):
         return int((self._cspc * 2 ** 18) / (self._fosc * 2 ** self.CHANSPC_E) - 256)
 
     @property
+    @limit(2)
+    def CHANBW_E(self):
+        return self._find_cbdw()[0]
+
+    @property
+    @limit(2)
+    def CHANBW_M(self):
+        return self._find_cbdw()[1]
+
+    def _find_cbdw(self):
+        return min(
+            [
+                (abs(self._cbdw - self._fosc / (8 * (4 + m) * 2 ** e)), (e, m))
+                for e in range(0, 3)
+                for m in range(0, 3)
+            ],
+            key=lambda x: x[0],
+        )[1]
+
+    @property
     def freq(self):
         return (
             self._fosc
@@ -70,12 +92,17 @@ class CC1101(object):
     def cspc(self):
         return (256 + self.CHANSPC_M) * 2 ** self.CHANSPC_E * self._fosc / 2 ** 18
 
+    @property
+    def cbdw(self):
+        return self._fosc / (8 * (4 + self.CHANBW_M) * 2 ** self.CHANBW_E)
+
     def __str__(self):
         return dedent(
             f"""\
             CC1101 Configuration:
-                Carier Frequency: {self.freq}
-                Data Rate:        {self.baud}
-                Channel spacing:  {self.cspc}
+                Carier Frequency:  {self.freq}
+                Data Rate:         {self.baud}
+                Channel Spacing:   {self.cspc}
+                Channel Bandwidth: {self.cbdw}
             """
         )

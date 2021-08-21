@@ -31,6 +31,8 @@ env = Environment(
         "RADIO_DRATE_M": cc1101.DRATE_M,
         "RADIO_CHANSPC_E": cc1101.CHANSPC_E,
         "RADIO_CHANSPC_M": cc1101.CHANSPC_M,
+        "RADIO_CHANBW_E": cc1101.CHANBW_E,
+        "RADIO_CHANBW_M": cc1101.CHANBW_M,
     },
     BUILDERS={
         "Hex": Builder(
