@@ -24,20 +24,20 @@ void spi_wait() {
 
 uint8_t spi_xfer(uint8_t in) {
   uint8_t out = 0;
-  for (int8_t i = 7; i > 0; --i) {
+  for (int8_t i = 7; i >= 0; --i) {
     // Write bit
     if ((in >> i) & 1) {
       PORTB |= (1 << PB0);
     } else {
       PORTB &= ~(1 << PB0);
     }
+    _delay_ms(DELAY);
     // Read bit
     out |= (PINB >> PB0) & 1;
     // tick the clock
     PORTB |= (1 << PB2);
     _delay_ms(DELAY);
     PORTB &= ~(1 << PB2);
-    _delay_ms(DELAY);
   }
   return out;
 }
