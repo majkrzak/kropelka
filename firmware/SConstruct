@@ -5,11 +5,11 @@ from cc1101 import CC1101
 name = "kropelka"
 
 cc1101 = CC1101(
-        oscilator_frequency = 26_000_000,
-        oscilator_error = 32.5 / 1_000_000,
-        carier_frequency = 433_920_000,
-        data_rate = 9600
-    )
+    oscilator_frequency=26_000_000,
+    oscilator_error=32.5 / 1_000_000,
+    carier_frequency=433_920_000,
+    data_rate=9600,
+)
 
 print(cc1101)
 
@@ -17,6 +17,7 @@ print(cc1101)
 env = Environment(
     CC="avr-gcc",
     OBJCOPY="avr-objcopy",
+    OBJDUMP="avr-objdump",
     CCFLAGS=[
         "-Os",
         "-Wall",
@@ -24,8 +25,12 @@ env = Environment(
         "-std=c11",
         "-mmcu=attiny13a",
     ],
+    LINKFLAGS=[
+        "-Os",
+        "-mmcu=attiny13a",
+    ],
     CPPDEFINES={
-        "F_CPU": 9600000,
+        "F_CPU": 9600000 // 8,
         "RADIO_FREQ": ",".join(map(str, cc1101.FREQ)),
         "RADIO_DRATE_E": cc1101.DRATE_E,
         "RADIO_DRATE_M": cc1101.DRATE_M,
@@ -33,16 +38,24 @@ env = Environment(
         "RADIO_CHANSPC_M": cc1101.CHANSPC_M,
         "RADIO_CHANBW_E": cc1101.CHANBW_E,
         "RADIO_CHANBW_M": cc1101.CHANBW_M,
+        "RADIO_PKTLEN": 4,
     },
     BUILDERS={
         "Hex": Builder(
             action="$OBJCOPY -j .text -j .data -O ihex $SOURCE $TARGET",
             suffix=".hex",
             single_source=True,
-        )
+        ),
+        "Asm": Builder(
+            action="$OBJDUMP -S --disassemble $SOURCE > $TARGET",
+            suffix=".asm",
+            single_source=True,
+        ),
     },
     PROGSUFFIX=".elf",
 )
 
+elf = env.Program(name, [env.Object(s) for s in env.Glob("*.c")])
 
-env.Hex(env.Program(name, [env.Object(s) for s in env.Glob("*.c")]))
+env.Hex(elf)
+env.Asm(elf)
