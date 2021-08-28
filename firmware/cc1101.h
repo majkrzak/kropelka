@@ -121,6 +121,7 @@ enum cc1101_burst_registers {
   CC1101_FIFO = 0x3F,    //!< TX/RX FIFO (64 bytes)
 };
 
+void cc1101_init();
 uint8_t cc1101_strobe(uint8_t);
 uint8_t cc1101_write(uint8_t, uint8_t);
 uint8_t cc1101_burst_write(uint8_t, uint8_t *, size_t);

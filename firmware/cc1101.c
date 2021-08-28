@@ -2,6 +2,8 @@
 
 #include "spi.h"
 
+void cc1101_init() { spi_deselect(); }
+
 uint8_t cc1101_strobe(uint8_t addr) {
   spi_select();
   spi_wait();
