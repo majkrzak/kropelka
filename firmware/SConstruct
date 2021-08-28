@@ -6,9 +6,9 @@ name = "kropelka"
 
 cc1101 = CC1101(
     oscilator_frequency=26_000_000,
-    oscilator_error=32.5 / 1_000_000,
+    oscilator_error=28.5 / 1_000_000,
     carier_frequency=433_920_000,
-    data_rate=9600,
+    data_rate=1200,
 )
 
 print(cc1101)
