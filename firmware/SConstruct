@@ -30,7 +30,7 @@ env = Environment(
         "-mmcu=attiny13a",
     ],
     CPPDEFINES={
-        "F_CPU": 9600000 // 8,
+        "F_CPU": 9600000,
         "RADIO_FREQ": ",".join(map(str, cc1101.FREQ)),
         "RADIO_DRATE_E": cc1101.DRATE_E,
         "RADIO_DRATE_M": cc1101.DRATE_M,

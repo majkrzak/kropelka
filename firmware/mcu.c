@@ -1,6 +1,7 @@
 #include "mcu.h"
 
 #include <avr/interrupt.h>
+#include <avr/power.h>
 #include <avr/sleep.h>
 #include <avr/wdt.h>
 
@@ -15,6 +16,7 @@ static void watchdog_arm() {
 }
 
 void mcu_init() {
+  clock_prescale_set(clock_div_1);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   watchdog_init();
 }
