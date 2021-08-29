@@ -30,8 +30,11 @@ void radio_init() {
                      2);
   cc1101_write(CC1101_PKTLEN, RADIO_PKTLEN);
   cc1101_burst_write(CC1101_SYNC, (uint8_t[]){0xAB, 0xBA}, 2);
-  cc1101_burst_write(CC1101_PATABLE, (uint8_t[]){0x00, 0x12}, 2);
   cc1101_write(CC1101_FREND0, (0x01 << 4) | 1);
+}
+
+void radio_wake() {
+  cc1101_burst_write(CC1101_PATABLE, (uint8_t[]){0x00, 0x12}, 2);
 }
 
 void radio_calibrate() {
