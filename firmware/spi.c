@@ -3,7 +3,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define DELAY 20
+#define DELAY 10
 
 void spi_init() {
   DDRB |= 1 << PB0;
@@ -12,10 +12,7 @@ void spi_init() {
   DDRB &= ~(1 << PB1);
 }
 
-void spi_select() {
-  PORTB &= ~(1 << PB4);
-  _delay_ms(DELAY);
-}
+void spi_select() { PORTB &= ~(1 << PB4); }
 
 void spi_wait() {
   while (PORTB & (1 << PB1))
@@ -31,12 +28,12 @@ uint8_t spi_xfer(uint8_t in) {
     } else {
       PORTB &= ~(1 << PB0);
     }
-    _delay_ms(DELAY);
+    _delay_us(DELAY);
     // Read bit
     out |= (PINB >> PB0) & 1;
     // tick the clock
     PORTB |= (1 << PB2);
-    _delay_ms(DELAY);
+    _delay_us(DELAY);
     PORTB &= ~(1 << PB2);
   }
   return out;
@@ -44,5 +41,5 @@ uint8_t spi_xfer(uint8_t in) {
 
 void spi_deselect() {
   PORTB |= (1 << PB4);
-  _delay_ms(DELAY);
+  _delay_us(DELAY);
 }
