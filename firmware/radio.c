@@ -34,6 +34,7 @@ void radio_init() {
 }
 
 void radio_wake() {
+  _wait_idle();
   cc1101_burst_write(CC1101_PATABLE, (uint8_t[]){0x00, 0x12}, 2);
 }
 
