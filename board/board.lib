@@ -1,6 +1,20 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
+# DFR0579
+#
+DEF DFR0579 U 0 40 Y Y 1 F N
+F0 "U" 150 50 50 H V C CNN
+F1 "DFR0579" 150 -350 50 H V C CNN
+F2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" 0 0 50 H I C CNN
+F3 "" 0 0 50 H I C CNN
+DRAW
+S 0 0 300 -300 0 1 0 f
+X VCC 1 400 -100 100 L 50 50 1 1 w
+X GND 2 400 -200 100 L 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
 # E07-M1101D
 #
 DEF E07-M1101D U 0 40 Y Y 1 F N
