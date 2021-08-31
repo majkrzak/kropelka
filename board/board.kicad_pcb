@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 6)
+    (drawings 8)
     (tracks 27)
     (zones 0)
     (modules 4)
@@ -318,6 +318,12 @@
     )
   )
 
+  (gr_text - (at 123.19 97.79) (layer F.SilkS)
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (gr_text + (at 118.11 97.79) (layer F.SilkS)
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
   (gr_text kropelka (at 107.95 100.33 90) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
