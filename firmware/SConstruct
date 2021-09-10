@@ -1,8 +1,20 @@
 from math import log
+from uuid import UUID
 
 from cc1101 import CC1101
 
+AddOption(
+    "--uuid",
+    dest="uuid",
+    type="string",
+    nargs=1,
+    action="store",
+    help="UUID of the device",
+    default="00000000-0000-0000-0000-000000000000",
+)
+
 name = "kropelka"
+uuid = UUID(GetOption("uuid"))
 
 cc1101 = CC1101(
     oscilator_frequency=26_000_000,
@@ -38,7 +50,8 @@ env = Environment(
         "RADIO_CHANSPC_M": cc1101.CHANSPC_M,
         "RADIO_CHANBW_E": cc1101.CHANBW_E,
         "RADIO_CHANBW_M": cc1101.CHANBW_M,
-        "RADIO_PKTLEN": 4,
+        "RADIO_PKTLEN": 21,
+        "PACKET_UUID": ",".join(map(str, uuid.bytes)),
     },
     BUILDERS={
         "Hex": Builder(
