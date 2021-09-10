@@ -17,7 +17,7 @@ void radio_init() {
           RADIO_CHANBW_E << 6 | RADIO_CHANBW_M << 4 | RADIO_DRATE_E,
           RADIO_DRATE_M,
           (0b011 << 4) | 1 << 3 |
-              011, // MOD_FORMAT: ASK/OOK, MC, SYNC_MODE:16/16
+              0b011, // MOD_FORMAT: ASK/OOK, MC, SYNC_MODE:16/16
           (0b100 << 4) | RADIO_CHANSPC_E, // NUM_PREAMBLE:4, CHANSPC_E (default)
           RADIO_CHANSPC_M,
       },
